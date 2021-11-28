@@ -16,7 +16,9 @@ RUN apt-get -y update \
 					       python3 \
 					       python3-dev \
 					       python3-pip \
-					       python3-numpy
+					       python3-numpy \
+						   doxygen \
+ && python3 -m pip install pybind11 sphinx breathe
 
 ENV DEVUSER=${DEVUSER}
 RUN adduser --uid 1000 --disabled-password --gecos "" ${DEVUSER} \

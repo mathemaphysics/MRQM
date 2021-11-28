@@ -5,6 +5,32 @@ project(MRQM VERSION 0.0.1 LANGUAGES CXX)
 
 # Initialize some default paths
 include(GNUInstallDirs)
+include(CTest)
+include(FetchContent)
+
+FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY  ssh://git@github.com/google/googletest.git
+    GIT_TAG         release-1.11.0
+)
+
+FetchContent_Declare(
+    spdlog
+    GIT_REPOSITORY  ssh://git@github.com/gabime/spdlog.git
+    GIT_TAG         v1.9.2
+)
+
+FetchContent_Declare(
+    flatbuffers
+    GIT_REPOSITORY  ssh://git@github.com/google/flatbuffers.git
+    GIT_TAG         v2.0.0
+)
+
+FetchContent_Declare(
+    jsoncpp
+    GIT_REPOSITORY  ssh://git@github.com/open-source-parsers/jsoncpp.git
+    GIT_TAG         1.9.4
+)
 
 # Define the minimum C++ standard that is required
 set(CMAKE_CXX_STANDARD 17)
@@ -16,18 +42,20 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(BUILD_PYTHON ON CACHE BOOL "Enable building of Python bindings")
 set(BUILD_DOCS ON CACHE BOOL "Enable building of documentation")
 
+FetchContent_MakeAvailable(spdlog)
+FetchContent_MakeAvailable(flatbuffers)
+FetchContent_MakeAvailable(jsoncpp)
+
 # compile the library
 add_subdirectory(src)
-
 
 # compile the application
 add_subdirectory(app)
 
 # compile the tests
-include(CTest)
 if(BUILD_TESTING)
-  add_subdirectory(ext/Catch2)
-  include(./ext/Catch2/contrib/Catch.cmake)
+  include(GoogleTest)
+  FetchContent_MakeAvailable(googletest)
   add_subdirectory(tests)
 endif()
 
